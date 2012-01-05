@@ -11,6 +11,7 @@
   },
   "background_page": "background.html",
   "permissions": [
-    "notifications"
+    "notifications",
+    "tts"
   ]
 }

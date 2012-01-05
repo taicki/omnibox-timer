@@ -43,10 +43,7 @@ function setNotification(text) {
     );
     setTimeout(function() {
       notification.show();
-      var alarm = document.getElementById('alarm');
-      if (alarm) {
-        alarm.play();
-      }
+      chrome.tts.speak(desc);
       console.log(id + ": notified at " + new Date().toString());
     }, ms);
   }
