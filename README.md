@@ -22,4 +22,4 @@ article][1]. The alarm bell is downloaded from [this page][3].
 [1]: http://www.smashingmagazine.com/2009/02/16/50-beautiful-useful-and-free-icon-sets/
 [2]: http://sabramedia.com/icons
 [3]: http://www.pachd.com/sounds.html
-[4]: http://chrome.google.com/webstore
+[4]: https://chrome.google.com/webstore/detail/iooaeaogjngpihndkcednkblomlkaaif
