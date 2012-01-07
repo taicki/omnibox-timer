@@ -1,5 +1,5 @@
 {
-  "name": "Timer",
+  "name": "Omnibox Timer",
   "version": "0.1",
   "omnibox": {
     "keyword": "tm"
