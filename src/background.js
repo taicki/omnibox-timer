@@ -15,7 +15,32 @@ function parseTime(str) {
   return num * mul;
 }
 
-function setNotification(text) {
+function setupNotification(seconds, desc) {
+  if (!window.webkitNotifications) {
+    return;
+  }
+
+  nid += 1;
+  var id = nid;
+  var ms = seconds * 1000;
+  var title = 'Timer done!';
+
+  console.log(id + ": setup " + seconds + " seconds from "
+              + new Date().toString());
+
+  var notification = window.webkitNotifications.createNotification(
+    "48.png",
+    title,
+    desc
+  );
+  setTimeout(function() {
+    notification.show();
+    chrome.tts.speak(desc);
+    console.log(id + ": notified at " + new Date().toString());
+  }, ms);
+}
+
+function tryToSetTimer(text) {
   var arr = text.split(/\s+/);
   var seconds = parseTime(arr.shift());
   if (!seconds) {
@@ -23,34 +48,17 @@ function setNotification(text) {
     return;
   }
 
-  nid += 1;
-  var id = nid;
-
-  var ms = seconds * 1000;
-  var title = 'Timer done!';
-  var desc = 'Timer done!';
-  if (arr.length > 0)
+  if (arr.length > 0) {
     desc = arr.join(" ");
-
-  console.log(id + ": setup " + seconds + " seconds from "
-              + new Date().toString());
-
-  if (window.webkitNotifications) {
-    var notification = window.webkitNotifications.createNotification(
-      "48.png",
-      title,
-      desc
-    );
-    setTimeout(function() {
-      notification.show();
-      chrome.tts.speak(desc);
-      console.log(id + ": notified at " + new Date().toString());
-    }, ms);
+  } else {
+    desc = 'Timer done!';
   }
+
+  setupNotification(seconds, desc);
 }
 
 chrome.omnibox.onInputEntered.addListener(function(text){
-  setNotification(text);
+  tryToSetTimer(text);
 });
 
 function resetDefaultSuggestion() {
