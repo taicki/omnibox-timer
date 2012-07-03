@@ -33,6 +33,10 @@ function setupNotification(seconds, desc) {
     title,
     desc
   );
+  notification.addEventListener('click', function(e) {
+    e.target.close();
+    console.log(id + ": closed at " + new Date().toString());
+  });
   setTimeout(function() {
     notification.show();
     chrome.tts.speak(desc);
