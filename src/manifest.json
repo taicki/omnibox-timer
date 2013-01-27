@@ -1,15 +1,22 @@
 {
+  "manifest_version": 2,
+
   "name": "Omnibox Timer",
+  "description": "A simple timmer built for Chrome",
   "version": "0.1.1",
+
   "omnibox": {
     "keyword": "tm"
   },
+
   "icons": {
     "16": "16.png",
     "48": "48.png",
     "128": "128.png"
   },
+
   "background_page": "background.html",
+
   "permissions": [
     "notifications",
     "tts"
