@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "Omnibox Timer",
-  "description": "A simple timmer built for Chrome",
+  "description": "A simple timer built for Chrome",
   "version": "0.1.1",
 
   "omnibox": {
