@@ -25,5 +25,9 @@
   "permissions": [
     "notifications",
     "tts"
+  ],
+
+  "web_accessible_resources": [
+    "48.png"
   ]
 }
