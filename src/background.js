@@ -15,23 +15,23 @@ function parseTime(str) {
   return num * mul;
 }
 
-function setupNotification(seconds, desc) {
+function setupNotification(timer) {
   if (!window.webkitNotifications) {
     return;
   }
 
   nid += 1;
   var id = nid;
-  var ms = seconds * 1000;
+  var ms = timer.seconds * 1000;
   var title = 'Timer done!';
 
-  console.log(id + ": setup " + seconds + " seconds from "
-              + new Date().toString());
+  console.log(id + ": setup " + timer.seconds + " seconds from "
+              + timer.currentTime);
 
   var notification = window.webkitNotifications.createNotification(
     "48.png",
     title,
-    desc
+    timer.desc
   );
   notification.addEventListener('click', function(e) {
     e.target.close();
@@ -39,7 +39,7 @@ function setupNotification(seconds, desc) {
   });
   setTimeout(function() {
     notification.show();
-    chrome.tts.speak(desc);
+    chrome.tts.speak(timer.desc);
     console.log(id + ": notified at " + new Date().toString());
   }, ms);
 }
@@ -58,5 +58,11 @@ function tryToSetTimer(text) {
     desc = 'Timer done!';
   }
 
-  setupNotification(seconds, desc);
+  var timer = {
+    currentTime: (new Date()).getTime(),
+    desc: desc,
+    seconds: seconds
+  };
+
+  setupNotification(timer);
 }
