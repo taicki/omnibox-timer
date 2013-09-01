@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Omnibox Timer</title>
+<title>Omnibox Timer: Options</title>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="underscore.js"></script>
 <script type="text/javascript" src="moment.js"></script>
@@ -16,9 +16,9 @@
 <table id="timers">
 <tbody>
 <tr>
-    <th>Description</th>
-    <th>Creation time</th>
-    <th>Notification time</th>
+  <th>Description</th>
+  <th>Creation time</th>
+  <th>Notification time</th>
 </tr>
 </tbody>
 </table>
@@ -27,7 +27,11 @@
 <ul id="stats"></ul>
 
 <h2>Options</h2>
-<p>Coming soon</p>
+<p>Sound:
+<input type="radio" name="soundType" value="tts" id="tts">TTS (Text To Speech)
+<input type="radio" name="soundType" value="bell" id="bell">Bell
+</p>
+<div id="flash"></div>
 
 </body>
 

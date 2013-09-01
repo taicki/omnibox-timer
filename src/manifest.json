@@ -3,7 +3,7 @@
 
   "name": "Omnibox Timer",
   "description": "A simple timer built for Chrome",
-  "version": "0.2",
+  "version": "0.3",
 
   "omnibox": {
     "keyword": "tm"
@@ -15,8 +15,17 @@
     "128": "128.png"
   },
 
+  "browser_action": {
+    "default_icon": {
+      "19": "19.png",
+      "38": "38.png"
+    },
+    "default_title": "Omnibox Timer"
+  },
+
   "background": {
     "scripts": [
+      "underscore.js",
       "background.js",
       "chrome.js"
     ]
@@ -27,7 +36,8 @@
   "permissions": [
     "notifications",
     "tts",
-    "storage"
+    "storage",
+    "tabs"
   ],
 
   "web_accessible_resources": [

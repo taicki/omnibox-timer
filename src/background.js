@@ -1,5 +1,17 @@
+// configurations
+var audioList = [
+  {
+    "name": "ring",
+    "src": "alarm.wav"
+  }
+];
+var audios = {};
+
 // Reset timers when Chrome starts
 resetTimers();
+
+// Load all Audios
+loadAudios();
 
 function parseTime(str) {
   var num = parseInt(str);
@@ -39,7 +51,13 @@ function setupNotification(timer) {
   });
   setTimeout(function() {
     notification.show();
-    chrome.tts.speak(timer.desc);
+    chrome.storage.local.get({soundType: "tts", soundId: "ring"}, function(object) {
+      if (object.soundType == "tts") {
+        chrome.tts.speak(timer.desc);
+      } else {
+        audios[object.soundId].play();
+      }
+    });
     console.log(id + ": notified at " + new Date().toString());
   }, ms);
 }
@@ -49,6 +67,7 @@ function tryToSetupTimer(text) {
   var seconds = parseTime(arr.shift());
   if (!seconds) {
     console.log("parse error: " + text);
+    giveFeedback("err");
     return;
   }
 
@@ -67,6 +86,7 @@ function tryToSetupTimer(text) {
   setupTimer(timer, function(timer) {
     setupNotification(timer);
     storeTimer(timer);
+    giveFeedback("add")
   });
 }
 
@@ -92,4 +112,21 @@ function resetTimers() {
   if (chrome && chrome.storage) {
     chrome.storage.local.set({timers: []});
   }
+}
+
+function loadAudios() {
+  _.each(audioList, function(item) {
+    var audio = new Audio();
+    audio.src = item.src;
+    audio.load();
+    audios[item.name] = audio;
+    console.log(audio);
+  });
+}
+
+function giveFeedback(message) {
+  chrome.browserAction.setBadgeText({text: message});
+  setTimeout(function() {
+    chrome.browserAction.setBadgeText({text: ""});
+  }, 3000);
 }
