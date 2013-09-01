@@ -24,49 +24,49 @@ describe("background.js", function() {
     });
   });
 
-  describe("#tryToSetTimer", function() {
+  describe("#tryToSetupTimer", function() {
     var previousFunc = null;
 
     beforeEach(function() {
-      previousFunc = window.setupNotification;
-      spyOn(window, "setupNotification");
+      previousFunc = window.setupTimer;
+      spyOn(window, "setupTimer");
     });
 
     afterEach(function() {
-      setupNotification = previousFunc;
+      setupTimer = previousFunc;
     });
 
-    it("should call setupNotification()", function() {
-      tryToSetTimer("10 haha");
-      expect(window.setupNotification).toHaveBeenCalled();
+    it("should call setupTimer()", function() {
+      tryToSetupTimer("10 haha");
+      expect(window.setupTimer).toHaveBeenCalled();
     });
 
-    it("should not call setupNotification() if parseTime() returns null", function() {
-      tryToSetTimer("abc");
-      expect(window.setupNotification).not.toHaveBeenCalled();
+    it("should not call setupTimer() if parseTime() returns null", function() {
+      tryToSetupTimer("abc");
+      expect(window.setupTimer).not.toHaveBeenCalled();
     });
 
     it("should have correct seconds when called properly", function() {
-      tryToSetTimer("10 haha");
-      timer = window.setupNotification.mostRecentCall.args[0];
+      tryToSetupTimer("10 haha");
+      timer = window.setupTimer.mostRecentCall.args[0];
       expect(timer.seconds).toEqual(10*60);
     });
 
     it("should have correct description when called properly", function() {
-      tryToSetTimer("10 haha");
-      timer = window.setupNotification.mostRecentCall.args[0];
+      tryToSetupTimer("10 haha");
+      timer = window.setupTimer.mostRecentCall.args[0];
       expect(timer.desc).toEqual("haha");
     });
 
     it("should have correct epoch seconds when called properly", function() {
-      tryToSetTimer("10 haha");
-      timer = window.setupNotification.mostRecentCall.args[0];
+      tryToSetupTimer("10 haha");
+      timer = window.setupTimer.mostRecentCall.args[0];
       expect(timer.currentTime).toBeGreaterThan(12345);
     });
 
     it("should have 'Timer done!' when only time is given", function() {
-      tryToSetTimer("10");
-      timer = window.setupNotification.mostRecentCall.args[0];
+      tryToSetupTimer("10");
+      timer = window.setupTimer.mostRecentCall.args[0];
       expect(timer.desc).toEqual("Timer done!");
     });
   });

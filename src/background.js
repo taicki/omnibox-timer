@@ -1,4 +1,5 @@
-var nid = 0;
+// Reset timers when Chrome starts
+resetTimers();
 
 function parseTime(str) {
   var num = parseInt(str);
@@ -20,8 +21,7 @@ function setupNotification(timer) {
     return;
   }
 
-  nid += 1;
-  var id = nid;
+  var id = timer.id;
   var ms = timer.seconds * 1000;
   var title = 'Timer done!';
 
@@ -44,7 +44,7 @@ function setupNotification(timer) {
   }, ms);
 }
 
-function tryToSetTimer(text) {
+function tryToSetupTimer(text) {
   var arr = text.split(/\s+/);
   var seconds = parseTime(arr.shift());
   if (!seconds) {
@@ -64,5 +64,32 @@ function tryToSetTimer(text) {
     seconds: seconds
   };
 
-  setupNotification(timer);
+  setupTimer(timer, function(timer) {
+    setupNotification(timer);
+    storeTimer(timer);
+  });
+}
+
+function setupTimer(timer, callback) {
+  chrome.storage.local.get({idCounter: 0}, function(object) {
+    var id = object.idCounter;
+    timer.id = id;
+    chrome.storage.local.set({idCounter: id+1});
+
+    callback(timer);
+  });
+}
+
+function storeTimer(timer) {
+  chrome.storage.local.get({timers: []}, function(object) {
+    timers = object.timers;
+    timers.unshift(timer);
+    chrome.storage.local.set({timers: timers});
+  });
+}
+
+function resetTimers() {
+  if (chrome && chrome.storage) {
+    chrome.storage.local.set({timers: []});
+  }
 }
