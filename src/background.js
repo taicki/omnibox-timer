@@ -67,6 +67,7 @@ function tryToSetupTimer(text) {
   var seconds = parseTime(arr.shift());
   if (!seconds) {
     console.log("parse error: " + text);
+    giveFeedback("err");
     return;
   }
 
@@ -85,6 +86,7 @@ function tryToSetupTimer(text) {
   setupTimer(timer, function(timer) {
     setupNotification(timer);
     storeTimer(timer);
+    giveFeedback("add")
   });
 }
 
@@ -120,4 +122,11 @@ function loadAudios() {
     audios[item.name] = audio;
     console.log(audio);
   });
+}
+
+function giveFeedback(message) {
+  chrome.browserAction.setBadgeText({text: message});
+  setTimeout(function() {
+    chrome.browserAction.setBadgeText({text: ""});
+  }, 3000);
 }
