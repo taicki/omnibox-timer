@@ -1,4 +1,5 @@
-var nid = 0;
+// Reset timers when Chrome starts
+resetTimers();
 
 function parseTime(str) {
   var num = parseInt(str);
@@ -15,23 +16,22 @@ function parseTime(str) {
   return num * mul;
 }
 
-function setupNotification(seconds, desc) {
+function setupNotification(timer) {
   if (!window.webkitNotifications) {
     return;
   }
 
-  nid += 1;
-  var id = nid;
-  var ms = seconds * 1000;
+  var id = timer.id;
+  var ms = timer.seconds * 1000;
   var title = 'Timer done!';
 
-  console.log(id + ": setup " + seconds + " seconds from "
-              + new Date().toString());
+  console.log(id + ": setup " + timer.seconds + " seconds from "
+              + timer.currentTime);
 
   var notification = window.webkitNotifications.createNotification(
     "48.png",
     title,
-    desc
+    timer.desc
   );
   notification.addEventListener('click', function(e) {
     e.target.close();
@@ -39,12 +39,12 @@ function setupNotification(seconds, desc) {
   });
   setTimeout(function() {
     notification.show();
-    chrome.tts.speak(desc);
+    chrome.tts.speak(timer.desc);
     console.log(id + ": notified at " + new Date().toString());
   }, ms);
 }
 
-function tryToSetTimer(text) {
+function tryToSetupTimer(text) {
   var arr = text.split(/\s+/);
   var seconds = parseTime(arr.shift());
   if (!seconds) {
@@ -58,5 +58,38 @@ function tryToSetTimer(text) {
     desc = 'Timer done!';
   }
 
-  setupNotification(seconds, desc);
+  var timer = {
+    currentTime: (new Date()).getTime(),
+    desc: desc,
+    seconds: seconds
+  };
+
+  setupTimer(timer, function(timer) {
+    setupNotification(timer);
+    storeTimer(timer);
+  });
+}
+
+function setupTimer(timer, callback) {
+  chrome.storage.local.get({idCounter: 0}, function(object) {
+    var id = object.idCounter;
+    timer.id = id;
+    chrome.storage.local.set({idCounter: id+1});
+
+    callback(timer);
+  });
+}
+
+function storeTimer(timer) {
+  chrome.storage.local.get({timers: []}, function(object) {
+    timers = object.timers;
+    timers.unshift(timer);
+    chrome.storage.local.set({timers: timers});
+  });
+}
+
+function resetTimers() {
+  if (chrome && chrome.storage) {
+    chrome.storage.local.set({timers: []});
+  }
 }

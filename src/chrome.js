@@ -1,5 +1,9 @@
 chrome.omnibox.onInputEntered.addListener(function(text){
-  tryToSetTimer(text);
+  if (text == "options" || text == "show") {
+    window.open("options.html");
+  } else {
+    tryToSetupTimer(text);
+  }
 });
 
 function resetDefaultSuggestion() {

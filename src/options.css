@@ -1,0 +1,11 @@
+table, th, td {
+  border: 1px solid black;
+}
+
+th {
+  width: 250px;
+}
+
+img {
+  vertical-align:bottom;
+}

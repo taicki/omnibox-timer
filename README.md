@@ -15,6 +15,10 @@ Please visit [chrome web store][4].
 * `20m Go home` : 20 minutes
 * `1h meeting` : 1 hour
 
+## More commands
+* `show` or `options` : opens Options page. This page shows timers you created,
+  statistics and options you can select.
+
 ## Media files
 I used the icons from [this page][2] introduced in [this
 article][1]. The alarm bell is downloaded from [this page][3].
