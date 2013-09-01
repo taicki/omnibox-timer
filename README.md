@@ -9,15 +9,25 @@ is 'Timer done!'.
 ## Install
 Please visit [chrome web store][4].
 
-## Examples
+## Timer commands
 * `10 Lunch` : the default unit is minute. This timer will ring in 10 minutes.
 * `30s` : 30 seconds
 * `20m Go home` : 20 minutes
 * `1h meeting` : 1 hour
 
 ## More commands
-* `show` or `options` : opens Options page. This page shows timers you created,
-  statistics and options you can select.
+* `show` or `options` : opens Options page.
+
+## UI
+* Browser Action
+  * You will see Omnibox Timer icon next to Omnibox.
+  * Hide: If you right-click the icon, you can see an option to hide this icon.
+  * Click: if you click the icon, chrome will open Options page.
+  * Feedback: you will see 'add' or 'error' from the icon
+    when you type any commands to Omnibox Timer.
+* Options
+  * This page shows timers you created, statistics and options you can select.
+  * You can open this page from Omnibox command, Browser Action icon or Chrome Settings page.
 
 ## Media files
 I used the icons from [this page][2] introduced in [this
