@@ -3,7 +3,7 @@
 
   "name": "Omnibox Timer",
   "description": "A simple timer built for Chrome",
-  "version": "0.3",
+  "version": "0.3.1",
 
   "omnibox": {
     "keyword": "tm"
