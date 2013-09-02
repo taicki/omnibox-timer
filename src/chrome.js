@@ -22,17 +22,9 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
 function openOptionsPage() {
   var url = chrome.runtime.getURL("options.html");
-  chrome.tabs.query({currentWindow: true}, function(tabs) {
-    var targetTab;
-    for (var i = 0; i < tabs.length; i++) {
-      var tab = tabs[i];
-      if (tab.url == url) {
-        targetTab = tab;
-        break;
-      }
-    }
-    if (targetTab) {
-      chrome.tabs.update(targetTab.id, {active: true});
+  chrome.tabs.query({url: url, currentWindow: true}, function(tabs) {
+    if (tabs.length > 0) {
+      chrome.tabs.update(tabs[0].id, {active: true});
     } else {
       chrome.tabs.create({url: url});
     }

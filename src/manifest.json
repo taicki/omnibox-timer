@@ -36,8 +36,7 @@
   "permissions": [
     "notifications",
     "tts",
-    "storage",
-    "tabs"
+    "storage"
   ],
 
   "web_accessible_resources": [
