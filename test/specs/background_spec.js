@@ -26,14 +26,18 @@ describe("background.js", function() {
 
   describe("#tryToSetupTimer", function() {
     var previousFunc = null;
+    var previousGiveFeedbackFunc = null;
 
     beforeEach(function() {
       previousFunc = window.setupTimer;
+      previousGiveFeedbackFunc = window.giveFeedback;
       spyOn(window, "setupTimer");
+      spyOn(window, "giveFeedback");
     });
 
     afterEach(function() {
       setupTimer = previousFunc;
+      giveFeedback = previousGiveFeedbackFunc;
     });
 
     it("should call setupTimer()", function() {
