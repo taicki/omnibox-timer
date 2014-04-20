@@ -74,4 +74,51 @@ describe("background.js", function() {
       expect(timer.desc).toEqual("Timer done!");
     });
   });
+
+  describe("#History", function() {
+    var history;
+
+    beforeEach(function() {
+      history = History();
+      history.add("10 foobar");
+      history.add("5 barbaz");
+    });
+
+    it("should find previous history", function() {
+      var found = history.find("foobar");
+      expect(found.length).toBe(1);
+      expect(found[0]).toEqual({text: "10 foobar", count: 1});
+    });
+
+    it("should find all previous history when empty string is given", function() {
+      var found = history.find("");
+      expect(found.length).toBe(2);
+    });
+
+    it("should not find unknown history", function() {
+      var found = history.find("timer");
+      expect(found.length).toBe(0);
+    });
+
+    it("should trim input when finding", function() {
+      var found = history.find(" foobar ");
+      expect(found.length).toBe(1);
+    });
+
+    it("should trim input when adding", function() {
+      history.add("7 raboof    ");
+      var found = history.find("raboof");
+      expect(found.length).toBe(1);
+      expect(found[0]).toEqual({text: "7 raboof", count: 1});
+    });
+
+    it("should increase count when adding same text", function() {
+      history.add("10 foobar");
+      history.add("10 foobar");
+      history.add("10 foobar");
+      var found = history.find("foobar");
+      expect(found.length).toBe(1);
+      expect(found[0]).toEqual({text: "10 foobar", count: 4});
+    });
+  });
 });

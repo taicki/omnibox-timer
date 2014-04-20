@@ -1,18 +1,5 @@
 // Store history
-var histories = [];
-var historiesHash = {};
-
-// Compare histories.
-// Frequently entered one comes first.
-function compareHistories(a, b) {
-  if (a["count"] < b["count"]) {
-    return 1;
-  } else if (a["count"] === b["count"]) {
-    return 0;
-  } else {
-    return -1;
-  }
-}
+var history = History()
 
 chrome.omnibox.onInputEntered.addListener(function(text){
   if (text == "options" || text == "show") {
@@ -22,18 +9,7 @@ chrome.omnibox.onInputEntered.addListener(function(text){
 
     // Store history when a timer is set
     if (result) {
-      text = text.trim()
-      if (text in historiesHash) {
-        historiesHash[text]["count"] += 1;
-      } else {
-        var obj = {
-          text: text,
-          count: 1
-        };
-        histories.push(obj);
-        historiesHash[text] = obj;
-      }
-      histories.sort(compareHistories);
+      history.add(text);
     }
   }
 });
@@ -50,15 +26,13 @@ chrome.omnibox.onInputStarted.addListener(function() {
 
 chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
   var suggestions = [];
-  var trimmed = text.trim()
-  for (var i = 0; i < histories.length; i++) {
-    var history = histories[i];
-    if (history["text"].indexOf(trimmed) >= 0) {
-      suggestions.push({
-        content: history["text"],
-        description: history["text"] + " - <dim>Used " + history["count"] + " time(s)</dim>"
-      });
-    }
+  var founds = history.find(text);
+  for (var i = 0; i < founds.length; i++) {
+    var found = founds[i];
+    suggestions.push({
+      content: found["text"],
+      description: found["text"] + " - <dim>Used " + found["count"] + " time(s)</dim>"
+    });
   }
   suggest(suggestions);
 });
