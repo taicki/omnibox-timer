@@ -14,7 +14,7 @@ resetTimers();
 loadAudios();
 
 function parseTime(str) {
-  var num = parseInt(str);
+  var num = parseFloat(str);
   if (isNaN(num))
     return null;
   var last = str.charAt(str.length - 1);
