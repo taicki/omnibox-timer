@@ -14,7 +14,7 @@ resetTimers();
 loadAudios();
 
 function parseTime(str) {
-  var num = parseInt(str);
+  var num = parseFloat(str);
   if (isNaN(num))
     return null;
   var last = str.charAt(str.length - 1);
@@ -46,7 +46,9 @@ function setupNotification(timer) {
     timer.desc
   );
   notification.addEventListener('click', function(e) {
-    e.target.close();
+    if (e && e.target && e.target.close) {
+      e.target.close();
+    }
     console.log(id + ": closed at " + new Date().toString());
   });
   setTimeout(function() {

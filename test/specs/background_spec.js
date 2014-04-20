@@ -17,6 +17,12 @@ describe("background.js", function() {
       expect( parseTime("123") ).toBe( 123*60 );
     });
 
+    it("should handle float input", function() {
+      expect( parseTime("123.5m") ).toBe( 123.5*60 );
+      expect( parseTime("123.5h") ).toBe( 123.5*60*60 );
+      expect( parseTime("123.5s") ).toBe( 123.5 );
+    });
+
     it("should return null for bad input", function() {
       expect( parseTime("a123") ).toBeNull();
       expect( parseTime("abc") ).toBeNull();
