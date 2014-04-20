@@ -68,7 +68,7 @@ function tryToSetupTimer(text) {
   if (!seconds) {
     console.log("parse error: " + text);
     giveFeedback("err");
-    return;
+    return false;
   }
 
   if (arr.length > 0) {
@@ -88,6 +88,8 @@ function tryToSetupTimer(text) {
     storeTimer(timer);
     giveFeedback("add")
   });
+
+  return true;
 }
 
 function setupTimer(timer, callback) {
@@ -115,13 +117,14 @@ function resetTimers() {
 }
 
 function loadAudios() {
-  _.each(audioList, function(item) {
+  for (var i = 0; i < audioList.length; i++) {
+    var item = audioList[i];
     var audio = new Audio();
     audio.src = item.src;
     audio.load();
     audios[item.name] = audio;
     console.log(audio);
-  });
+  }
 }
 
 function giveFeedback(message) {
@@ -129,4 +132,54 @@ function giveFeedback(message) {
   setTimeout(function() {
     chrome.browserAction.setBadgeText({text: ""});
   }, 3000);
+}
+
+function History() {
+  // Store history
+  var histories = [];
+  var historiesHash = {};
+
+  // Compare histories.
+  // Frequently entered one comes first.
+  function compare(a, b) {
+    if (a["count"] < b["count"]) {
+      return 1;
+    } else if (a["count"] === b["count"]) {
+      return 0;
+    } else {
+      return -1;
+    }
+  }
+
+  return {
+    add: function(text) {
+      text = text.trim()
+      if (text in historiesHash) {
+        historiesHash[text]["count"] += 1;
+      } else {
+        var obj = {
+          text: text,
+          count: 1
+        };
+        histories.push(obj);
+        historiesHash[text] = obj;
+      }
+      histories.sort(compare);
+    },
+    find: function(text) {
+      var text = text.trim();
+      var founds = [];
+      for (var i = 0; i < histories.length; i++) {
+        var history = histories[i];
+        if (history["text"].indexOf(text) >= 0) {
+          // copy
+          founds.push({
+            text: history["text"],
+            count: history["count"]
+          });
+        }
+      }
+      return founds;
+    }
+  }
 }
