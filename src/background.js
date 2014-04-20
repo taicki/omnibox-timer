@@ -117,13 +117,14 @@ function resetTimers() {
 }
 
 function loadAudios() {
-  _.each(audioList, function(item) {
+  for (var i = 0; i < audioList.length; i++) {
+    var item = audioList[i];
     var audio = new Audio();
     audio.src = item.src;
     audio.load();
     audios[item.name] = audio;
     console.log(audio);
-  });
+  }
 }
 
 function giveFeedback(message) {
