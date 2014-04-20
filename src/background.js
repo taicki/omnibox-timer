@@ -46,7 +46,9 @@ function setupNotification(timer) {
     timer.desc
   );
   notification.addEventListener('click', function(e) {
-    e.target.close();
+    if (e && e.target && e.target.close) {
+      e.target.close();
+    }
     console.log(id + ": closed at " + new Date().toString());
   });
   setTimeout(function() {
