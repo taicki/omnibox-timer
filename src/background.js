@@ -68,7 +68,7 @@ function tryToSetupTimer(text) {
   if (!seconds) {
     console.log("parse error: " + text);
     giveFeedback("err");
-    return;
+    return false;
   }
 
   if (arr.length > 0) {
@@ -88,6 +88,8 @@ function tryToSetupTimer(text) {
     storeTimer(timer);
     giveFeedback("add")
   });
+
+  return true;
 }
 
 function setupTimer(timer, callback) {
