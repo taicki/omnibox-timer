@@ -1,5 +1,6 @@
 // Store history
 var history = History()
+resetDefaultSuggestion();
 
 chrome.omnibox.onInputEntered.addListener(function(text){
   if (text == "options" || text == "show") {
@@ -14,6 +15,16 @@ chrome.omnibox.onInputEntered.addListener(function(text){
   }
 });
 
+function updateDefaultSuggestion(text) {
+  if (text.trim() === "") {
+    resetDefaultSuggestion();
+  } else {
+    chrome.omnibox.setDefaultSuggestion({
+      description: 'Timer set: <match>' + text + '</match> | &lt;time&gt; [&lt;message&gt;]'
+    });
+  }
+}
+
 function resetDefaultSuggestion() {
   chrome.omnibox.setDefaultSuggestion({
     description: 'Timer set: &lt;time&gt; [&lt;message&gt;]'
@@ -25,6 +36,7 @@ chrome.omnibox.onInputStarted.addListener(function() {
 });
 
 chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
+  updateDefaultSuggestion(text);
   chrome.storage.local.get({historySuggestionType: "time"}, function(object) {
     var suggestions = [];
     if (object.historySuggestionType === "time") {
@@ -41,6 +53,10 @@ chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
     }
     suggest(suggestions);
   });
+});
+
+chrome.omnibox.onInputCancelled.addListener(function(text, suggest) {
+  resetDefaultSuggestion();
 });
 
 chrome.browserAction.onClicked.addListener(function(tab) {
