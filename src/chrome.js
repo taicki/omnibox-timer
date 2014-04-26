@@ -26,7 +26,7 @@ chrome.omnibox.onInputStarted.addListener(function() {
 
 chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
   var suggestions = [];
-  var founds = history.find(text);
+  var founds = history.findByCount(text);
   for (var i = 0; i < founds.length; i++) {
     var found = founds[i];
     suggestions.push({

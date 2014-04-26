@@ -138,50 +138,71 @@ function giveFeedback(message) {
 
 function History() {
   // Store history
-  var histories = [];
+  var historiesByTime = [];
+  var historiesByCount = [];
   var historiesHash = {};
 
   // Compare histories.
-  // Frequently entered one comes first.
-  function compare(a, b) {
+  // Frequently entered one comes later.
+  function compareByCount(a, b) {
     if (a["count"] < b["count"]) {
-      return 1;
+      return -1;
     } else if (a["count"] === b["count"]) {
       return 0;
     } else {
-      return -1;
+      return 1;
     }
+  }
+
+  function findHistories(histories, text) {
+    var text = text.trim();
+    var founds = [];
+    for (var i = histories.length - 1; i >= 0; i--) {
+      var history = histories[i];
+      if (history["text"].indexOf(text) >= 0) {
+        // copy
+        founds.push({
+          text: history["text"],
+          count: history["count"],
+          timestamp: history["timestamp"]
+        });
+      }
+    }
+    return founds;
   }
 
   return {
     add: function(text) {
       text = text.trim()
       if (text in historiesHash) {
-        historiesHash[text]["count"] += 1;
+        var history = historiesHash[text];
+
+        history["count"] += 1;
+        history["timestamp"] = new Date().getTime();
+
+        // sort by time: the latest one goes to the end.
+        var idx = historiesByTime.indexOf(history);
+        historiesByTime.splice(idx, 1);
+        historiesByTime.push(history);
       } else {
         var obj = {
           text: text,
-          count: 1
+          count: 1,
+          timestamp: new Date().getTime()
         };
-        histories.push(obj);
+        historiesByCount.push(obj);
+        historiesByTime.push(obj);
         historiesHash[text] = obj;
       }
-      histories.sort(compare);
+
+      // sort by count: frequently input one goes to the end.
+      historiesByCount.sort(compareByCount);
     },
-    find: function(text) {
-      var text = text.trim();
-      var founds = [];
-      for (var i = 0; i < histories.length; i++) {
-        var history = histories[i];
-        if (history["text"].indexOf(text) >= 0) {
-          // copy
-          founds.push({
-            text: history["text"],
-            count: history["count"]
-          });
-        }
-      }
-      return founds;
+    findByCount: function(text) {
+      return findHistories(historiesByCount, text);
+    },
+    findByTime: function(text) {
+      return findHistories(historiesByTime, text);
     }
   }
 }
