@@ -26,14 +26,25 @@
 <ul id="stats"></ul>
 
 <h2>Options</h2>
+
+<div>
 <p>Sound:
-<input type="radio" name="soundType" value="tts" id="tts">TTS (Text To Speech)
-<input type="radio" name="soundType" value="bell" id="bell">Bell
+<input type="radio" name="soundType" value="tts" id="tts">
+<label for="tts">TTS (Text To Speech)</label>
+<input type="radio" name="soundType" value="bell" id="bell">
+<label for="bell">Bell</label>
 </p>
-<p>How to suggest timers:
-<input type="radio" name="historySuggestionType" value="time" id="time">Suggest most recently used timer first
-<input type="radio" name="historySuggestionType" value="count" id="count">Suggest most frequently used timer first
+</div>
+
+<div>
+<p>How to suggest timer texts:
+<input type="radio" name="historySuggestionType" value="time" id="time">
+<label for="time">Suggest most recently used timer text first</label>
+<input type="radio" name="historySuggestionType" value="count" id="count">
+<label for="count">Suggest most frequently used timer text first</label>
 </p>
+</div>
+
 <div id="flash"></div>
 
 </body>
