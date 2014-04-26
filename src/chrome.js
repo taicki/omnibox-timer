@@ -25,16 +25,22 @@ chrome.omnibox.onInputStarted.addListener(function() {
 });
 
 chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
-  var suggestions = [];
-  var founds = history.findByCount(text);
-  for (var i = 0; i < founds.length; i++) {
-    var found = founds[i];
-    suggestions.push({
-      content: found["text"],
-      description: found["text"] + " - <dim>Used " + found["count"] + " time(s)</dim>"
-    });
-  }
-  suggest(suggestions);
+  chrome.storage.local.get({historySuggestionType: "time"}, function(object) {
+    var suggestions = [];
+    if (object.historySuggestionType === "time") {
+      var founds = history.findByTime(text);
+    } else {
+      var founds = history.findByCount(text);
+    }
+    for (var i = 0; i < founds.length; i++) {
+      var found = founds[i];
+      suggestions.push({
+        content: found["text"],
+        description: found["text"] + " - <dim>Used " + found["count"] + " time(s)</dim>"
+      });
+    }
+    suggest(suggestions);
+  });
 });
 
 chrome.browserAction.onClicked.addListener(function(tab) {

@@ -1,6 +1,10 @@
 $(function() {
-  chrome.storage.local.get({timers: [], idCounter: 0, soundType: "tts"}, function(object) {
-
+  chrome.storage.local.get({
+    timers: [],
+    idCounter: 0,
+    soundType: "tts",
+    historySuggestionType: "time"
+  }, function(object) {
     for (var i = 0; i < object.timers.length; i++) {
       var timer = object.timers[i];
       notificationTime = timer.currentTime + timer.seconds * 1000;
@@ -27,6 +31,22 @@ $(function() {
       chrome.storage.local.set({soundType: "bell"});
       showSaveMessage();
     });
+
+    if (object.historySuggestionType === "time") {
+      $("input#time").attr("checked", true);
+    } else {
+      $("input#count").attr("checked", true);
+    }
+
+    $("input#time").change(function() {
+      chrome.storage.local.set({historySuggestionType: "time"});
+      showSaveMessage();
+    });
+    $("input#count").change(function() {
+      chrome.storage.local.set({historySuggestionType: "count"});
+      showSaveMessage();
+    });
+
   });
 });
 
