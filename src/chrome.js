@@ -1,5 +1,6 @@
 // Store history
 var history = History()
+resetDefaultSuggestion();
 
 chrome.omnibox.onInputEntered.addListener(function(text){
   if (text == "options" || text == "show") {
@@ -14,6 +15,16 @@ chrome.omnibox.onInputEntered.addListener(function(text){
   }
 });
 
+function updateDefaultSuggestion(text) {
+  if (text.trim() === "") {
+    resetDefaultSuggestion();
+  } else {
+    chrome.omnibox.setDefaultSuggestion({
+      description: 'Timer set: <match>' + text + '</match> | &lt;time&gt; [&lt;message&gt;]'
+    });
+  }
+}
+
 function resetDefaultSuggestion() {
   chrome.omnibox.setDefaultSuggestion({
     description: 'Timer set: &lt;time&gt; [&lt;message&gt;]'
@@ -25,16 +36,27 @@ chrome.omnibox.onInputStarted.addListener(function() {
 });
 
 chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
-  var suggestions = [];
-  var founds = history.find(text);
-  for (var i = 0; i < founds.length; i++) {
-    var found = founds[i];
-    suggestions.push({
-      content: found["text"],
-      description: found["text"] + " - <dim>Used " + found["count"] + " time(s)</dim>"
-    });
-  }
-  suggest(suggestions);
+  updateDefaultSuggestion(text);
+  chrome.storage.local.get({historySuggestionType: "time"}, function(object) {
+    var suggestions = [];
+    if (object.historySuggestionType === "time") {
+      var founds = history.findByTime(text);
+    } else {
+      var founds = history.findByCount(text);
+    }
+    for (var i = 0; i < founds.length; i++) {
+      var found = founds[i];
+      suggestions.push({
+        content: found["text"],
+        description: found["text"] + " - <dim>Used " + found["count"] + " time(s)</dim>"
+      });
+    }
+    suggest(suggestions);
+  });
+});
+
+chrome.omnibox.onInputCancelled.addListener(function(text, suggest) {
+  resetDefaultSuggestion();
 });
 
 chrome.browserAction.onClicked.addListener(function(tab) {

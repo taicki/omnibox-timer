@@ -81,7 +81,7 @@ describe("background.js", function() {
     });
   });
 
-  describe("#History", function() {
+  describe("#History.findByCount()", function() {
     var history;
 
     beforeEach(function() {
@@ -91,40 +91,113 @@ describe("background.js", function() {
     });
 
     it("should find previous history", function() {
-      var found = history.find("foobar");
-      expect(found.length).toBe(1);
-      expect(found[0]).toEqual({text: "10 foobar", count: 1});
+      var founds = history.findByCount("foobar");
+      expect(founds.length).toBe(1);
+      expect(founds[0]["text"]).toEqual("10 foobar");
+      expect(founds[0]["count"]).toEqual(1);
     });
 
     it("should find all previous history when empty string is given", function() {
-      var found = history.find("");
-      expect(found.length).toBe(2);
+      var founds = history.findByCount("");
+      expect(founds.length).toBe(2);
     });
 
     it("should not find unknown history", function() {
-      var found = history.find("timer");
-      expect(found.length).toBe(0);
+      var founds = history.findByCount("timer");
+      expect(founds.length).toBe(0);
     });
 
     it("should trim input when finding", function() {
-      var found = history.find(" foobar ");
-      expect(found.length).toBe(1);
+      var founds = history.findByCount(" foobar ");
+      expect(founds.length).toBe(1);
+      expect(founds[0]["text"]).toEqual("10 foobar");
     });
 
     it("should trim input when adding", function() {
       history.add("7 raboof    ");
-      var found = history.find("raboof");
-      expect(found.length).toBe(1);
-      expect(found[0]).toEqual({text: "7 raboof", count: 1});
+      var founds = history.findByCount("raboof");
+      expect(founds.length).toBe(1);
+      expect(founds[0]["text"]).toEqual("7 raboof");
+      expect(founds[0]["count"]).toEqual(1);
     });
 
     it("should increase count when adding same text", function() {
       history.add("10 foobar");
       history.add("10 foobar");
       history.add("10 foobar");
-      var found = history.find("foobar");
-      expect(found.length).toBe(1);
-      expect(found[0]).toEqual({text: "10 foobar", count: 4});
+      var founds = history.findByCount("foobar");
+      expect(founds.length).toBe(1);
+      expect(founds[0]["text"]).toEqual("10 foobar");
+      expect(founds[0]["count"]).toEqual(4);
+    });
+
+    it("should find and return founds sorted by count", function() {
+      history.add("10 foobar");
+      history.add("3 foobar");
+      var founds = history.findByCount("foobar");
+      expect(founds.length).toBe(2);
+      expect(founds[0]["text"]).toEqual("10 foobar");
+      expect(founds[1]["text"]).toEqual("3 foobar");
+    });
+  });
+
+  describe("#History.findByTime()", function() {
+    var history;
+
+    beforeEach(function() {
+      history = History();
+      history.add("10 foobar");
+      history.add("5 barbaz");
+    });
+
+    it("should find previous history", function() {
+      var founds = history.findByTime("foobar");
+      expect(founds.length).toBe(1);
+      expect(founds[0]["text"]).toEqual("10 foobar");
+      expect(founds[0]["count"]).toEqual(1);
+    });
+
+    it("should find all previous history when empty string is given", function() {
+      var founds = history.findByTime("");
+      expect(founds.length).toBe(2);
+    });
+
+    it("should not find unknown history", function() {
+      var founds = history.findByTime("timer");
+      expect(founds.length).toBe(0);
+    });
+
+    it("should trim input when find", function() {
+      var founds = history.findByTime(" foobar ");
+      expect(founds.length).toBe(1);
+    });
+
+    it("should trim input when find", function() {
+      history.add("7 raboof    ");
+      var founds = history.findByTime("raboof");
+      expect(founds.length).toBe(1);
+      expect(founds[0]["text"]).toEqual("7 raboof");
+      expect(founds[0]["count"]).toEqual(1);
+    });
+
+    it("should increase count when adding same text", function() {
+      history.add("10 foobar");
+      history.add("10 foobar");
+      history.add("10 foobar");
+      var founds = history.findByTime("foobar");
+      expect(founds.length).toBe(1);
+      expect(founds[0]["text"]).toEqual("10 foobar");
+      expect(founds[0]["count"]).toEqual(4);
+    });
+
+    it("should find and return founds sorted by timestamp", function() {
+      history.add("5 foobar");
+      history.add("3 foobar");
+      var founds = history.findByTime("foobar");
+      expect(founds.length).toBe(3);
+      expect(founds[0]["text"]).toEqual("3 foobar");
+      expect(founds[1]["text"]).toEqual("5 foobar");
+      expect(founds[2]["text"]).toEqual("10 foobar");
     });
   });
 });
