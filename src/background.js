@@ -138,8 +138,8 @@ function giveFeedback(message) {
 
 function History() {
   // Store history
-  var historiesByTime = [];
-  var historiesByCount = [];
+  var sortedByTime = [];
+  var sortedByCount = [];
   var historiesHash = {};
 
   // Compare histories.
@@ -181,28 +181,28 @@ function History() {
         history["timestamp"] = new Date().getTime();
 
         // sort by time: the latest one goes to the end.
-        var idx = historiesByTime.indexOf(history);
-        historiesByTime.splice(idx, 1);
-        historiesByTime.push(history);
+        var idx = sortedByTime.indexOf(history);
+        sortedByTime.splice(idx, 1);
+        sortedByTime.push(history);
       } else {
         var obj = {
           text: text,
           count: 1,
           timestamp: new Date().getTime()
         };
-        historiesByCount.push(obj);
-        historiesByTime.push(obj);
+        sortedByCount.push(obj);
+        sortedByTime.push(obj);
         historiesHash[text] = obj;
       }
 
       // sort by count: frequently input one goes to the end.
-      historiesByCount.sort(compareByCount);
+      sortedByCount.sort(compareByCount);
     },
     findByCount: function(text) {
-      return findHistories(historiesByCount, text);
+      return findHistories(sortedByCount, text);
     },
     findByTime: function(text) {
-      return findHistories(historiesByTime, text);
+      return findHistories(sortedByTime, text);
     }
   }
 }
