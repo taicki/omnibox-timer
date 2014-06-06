@@ -7,9 +7,6 @@ var audioList = [
 ];
 var audios = {};
 
-// Reset timers when Chrome starts
-resetTimers();
-
 // Load all Audios
 loadAudios();
 
@@ -112,12 +109,6 @@ function storeTimer(timer) {
     timers.unshift(timer);
     chrome.storage.local.set({timers: timers});
   });
-}
-
-function resetTimers() {
-  if (chrome && chrome.storage) {
-    chrome.storage.local.set({timers: []});
-  }
 }
 
 function loadAudios() {

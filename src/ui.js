@@ -17,6 +17,11 @@ $(function() {
       );
     }
 
+    $("#clearTimers").click(function() {
+      chrome.storage.local.set({timers: []});
+      $("#timers > tbody").empty();
+    });
+
     $("#stats").append("<li># of timers you created: " + object.idCounter + "</li>");
 
     if (object.soundType == "tts") {
