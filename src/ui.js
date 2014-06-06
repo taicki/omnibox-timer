@@ -8,12 +8,17 @@ $(function() {
     for (var i = 0; i < object.timers.length; i++) {
       var timer = object.timers[i];
       notificationTime = timer.currentTime + timer.seconds * 1000;
-      $("#timers > tbody:last").append(
+      $("#timers > tbody").append(
         "<tr><td>" + timer.desc + "</td>"
         + "<td>" + moment(timer.currentTime).calendar() + "</td>"
         + "<td>" + moment(notificationTime).calendar() + " (" + moment(notificationTime).fromNow() + ")</td>"
         + "</tr>");
     }
+
+    $("#clearTimers").click(function() {
+      chrome.storage.local.set({timers: []});
+      $("#timers > tbody").empty();
+    });
 
     $("#stats").append("<li># of timers you created: " + object.idCounter + "</li>");
 
