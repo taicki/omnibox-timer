@@ -47,13 +47,6 @@ function setupNotification(timer) {
       message: timer.desc,
       iconUrl: "128.png"
     }, function() {
-      chrome.notifications.onClicked.addListener(function(notificationId) {
-        if (notificationId === id) {
-          chrome.notifications.clear(id, function() {
-            console.log(id + ": closed at " + new Date().toString());
-          });
-        }
-      });
       chrome.storage.local.get({soundType: "tts", soundId: "ring"}, function(object) {
         if (object.soundType == "tts") {
           chrome.tts.speak(timer.desc);
