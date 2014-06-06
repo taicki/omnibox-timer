@@ -29,38 +29,40 @@ function parseTime(str) {
 }
 
 function setupNotification(timer) {
-  if (!window.webkitNotifications) {
+  if (!chrome.notifications) {
     return;
   }
 
-  var id = timer.id;
+  var id = String(timer.id);
   var ms = timer.seconds * 1000;
   var title = 'Timer done!';
 
   console.log(id + ": setup " + timer.seconds + " seconds from "
               + timer.currentTime);
 
-  var notification = window.webkitNotifications.createNotification(
-    "48.png",
-    title,
-    timer.desc
-  );
-  notification.addEventListener('click', function(e) {
-    if (e && e.target && e.target.close) {
-      e.target.close();
-    }
-    console.log(id + ": closed at " + new Date().toString());
-  });
   setTimeout(function() {
-    notification.show();
-    chrome.storage.local.get({soundType: "tts", soundId: "ring"}, function(object) {
-      if (object.soundType == "tts") {
-        chrome.tts.speak(timer.desc);
-      } else {
-        audios[object.soundId].play();
-      }
+    chrome.notifications.create(id, {
+      type: "basic",
+      title: title,
+      message: timer.desc,
+      iconUrl: "128.png"
+    }, function() {
+      chrome.notifications.onClicked.addListener(function(notificationId) {
+        if (notificationId === id) {
+          chrome.notifications.clear(id, function() {
+            console.log(id + ": closed at " + new Date().toString());
+          });
+        }
+      });
+      chrome.storage.local.get({soundType: "tts", soundId: "ring"}, function(object) {
+        if (object.soundType == "tts") {
+          chrome.tts.speak(timer.desc);
+        } else {
+          audios[object.soundId].play();
+        }
+      });
+      console.log(id + ": notified at " + new Date().toString());
     });
-    console.log(id + ": notified at " + new Date().toString());
   }, ms);
 }
 
