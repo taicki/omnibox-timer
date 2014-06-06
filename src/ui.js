@@ -8,7 +8,7 @@ $(function() {
     for (var i = 0; i < object.timers.length; i++) {
       var timer = object.timers[i];
       notificationTime = timer.currentTime + timer.seconds * 1000;
-      $("#timers > tbody:last").append(
+      $("#timers > tbody").append(
         "<tr><td>" + timer.desc + "</td>"
         + "<td>" + moment(timer.currentTime).calendar() + "</td>"
         + "<td>" + moment(notificationTime).calendar() + " (" + moment(notificationTime).fromNow() + ")</td>"
