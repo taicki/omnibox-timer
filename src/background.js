@@ -46,7 +46,7 @@ function setupNotification(timer) {
       type: "basic",
       title: title,
       message: timer.desc,
-      iconUrl: "128.png"
+      iconUrl: "48.png"
     }, function() {
       chrome.notifications.onClicked.addListener(function(notificationId) {
         if (notificationId === id) {
