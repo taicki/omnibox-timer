@@ -30,6 +30,7 @@ function parseTime(str) {
 
 function setupNotification(timer) {
   if (!chrome.notifications) {
+    console.log("Notification is not supported.");
     return;
   }
 
