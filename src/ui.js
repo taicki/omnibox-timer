@@ -9,10 +9,12 @@ $(function() {
       var timer = object.timers[i];
       notificationTime = timer.currentTime + timer.seconds * 1000;
       $("#timers > tbody").append(
-        "<tr><td>" + timer.desc + "</td>"
-        + "<td>" + moment(timer.currentTime).calendar() + "</td>"
-        + "<td>" + moment(notificationTime).calendar() + " (" + moment(notificationTime).fromNow() + ")</td>"
-        + "</tr>");
+        $("<tr>").append(
+          $("<td>").html(timer.desc),
+          $("<td>").html(moment(timer.currentTime).calendar()),
+          $("<td>").html(moment(notificationTime).calendar() + " (" + moment(notificationTime).fromNow() + ")")
+        )
+      );
     }
 
     $("#stats").append("<li># of timers you created: " + object.idCounter + "</li>");
