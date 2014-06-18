@@ -77,6 +77,7 @@ function tryToSetupTimer(text) {
 
   var timer = {
     currentTime: (new Date()).getTime(),
+    text: text,
     desc: desc,
     seconds: seconds
   };

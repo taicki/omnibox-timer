@@ -10,7 +10,7 @@ $(function() {
       notificationTime = timer.currentTime + timer.seconds * 1000;
       $("#timers > tbody").append(
         $("<tr>").append(
-          $("<td>").html(timer.desc),
+          $("<td>").html(timer.text),
           $("<td>").html(moment(timer.currentTime).calendar()),
           $("<td>").html(moment(notificationTime).calendar() + " (" + moment(notificationTime).fromNow() + ")")
         )
