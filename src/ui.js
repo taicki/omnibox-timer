@@ -53,9 +53,5 @@ $(function() {
 });
 
 function showSaveMessage() {
-  $("#flash").show();
-  $("#flash").html("Saved");
-  setTimeout(function() {
-    $("#flash").fadeOut("slow");
-  }, 1000);
+  $("#flash").stop(true, true).html("saved!").show().fadeOut(2000);
 }
