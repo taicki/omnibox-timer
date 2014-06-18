@@ -10,22 +10,6 @@
 
 <body>
 <h1><img src="48.png"/> Omnibox Timer</h1>
-<h2>Current timers <input type="button" id="clearTimers" value="Clear"/></h2>
-<p>Sorted by creation time. Please refresh this page if you created more timers.</p>
-<table id="timers">
-<thead>
-<tr>
-  <th>Description</th>
-  <th>Creation time</th>
-  <th>Notification time</th>
-</tr>
-</thead>
-<tbody>
-</tbody>
-</table>
-
-<h2>Statistics</h2>
-<ul id="stats"></ul>
 
 <h2>Options <em id="flash"></em></h2>
 
@@ -46,6 +30,21 @@
 <label for="count">Suggest most frequently used timer text first</label>
 </p>
 </div>
+
+<h2>History <input type="button" id="clear" value="Clear"/></h2>
+<p>You have created <span id="stats"></span> timers (listed below, sorted by creation time) so far.
+<br>Please refresh this page to see timers you created after opening this page.</p>
+<table id="timers">
+<thead>
+<tr>
+  <th>Timer description</th>
+  <th>Creation time</th>
+  <th>Notification time</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
 
 </body>
 

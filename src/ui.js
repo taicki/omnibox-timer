@@ -17,12 +17,12 @@ $(function() {
       );
     }
 
-    $("#clearTimers").click(function() {
-      chrome.storage.local.set({timers: []});
-      $("#timers > tbody").empty();
+    $("#clear").click(function() {
+      chrome.storage.local.set({timers: [], idCounter: 0});
+      window.location.reload();
     });
 
-    $("#stats").append("<li># of timers you created: " + object.idCounter + "</li>");
+    $("#stats").text(object.idCounter);
 
     if (object.soundType == "tts") {
       $("input#tts").attr("checked", true);
