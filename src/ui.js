@@ -18,7 +18,8 @@ $(function() {
     }
 
     $("#clear").click(function() {
-      chrome.storage.local.set({timers: [], idCounter: 0});
+      chrome.storage.local.set({timers: [], idCounter: 0, notificationCounter: 0});
+      chrome.extension.getBackgroundPage().window.location.reload();
       window.location.reload();
     });
 

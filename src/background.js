@@ -7,6 +7,9 @@ var audioList = [
 ];
 var audios = {};
 
+// Show timer count
+showActiveTimerCount();
+
 // Load all Audios
 loadAudios();
 
@@ -49,12 +52,14 @@ function setupNotification(timer) {
       }
       console.log(id + ": closed at " + new Date().toString());
     });
-    chrome.storage.local.get({soundType: "tts", soundId: "ring"}, function(object) {
+    chrome.storage.local.get({soundType: "tts", soundId: "ring", notificationCounter: 0}, function(object) {
       if (object.soundType == "tts") {
         chrome.tts.speak(timer.desc);
       } else {
         audios[object.soundId].play();
       }
+      chrome.storage.local.set({notificationCounter: object.notificationCounter+1});
+      showActiveTimerCount();
     });
     console.log(id + ": notified at " + new Date().toString());
   }, ms);
@@ -85,7 +90,7 @@ function tryToSetupTimer(text) {
   setupTimer(timer, function(timer) {
     setupNotification(timer);
     storeTimer(timer);
-    giveFeedback("add")
+    giveFeedback("add");
   });
 
   return true;
@@ -121,10 +126,17 @@ function loadAudios() {
 }
 
 function giveFeedback(message) {
+  chrome.browserAction.setBadgeBackgroundColor({color: '#00F'});
   chrome.browserAction.setBadgeText({text: message});
-  setTimeout(function() {
-    chrome.browserAction.setBadgeText({text: ""});
-  }, 3000);
+  setTimeout(showActiveTimerCount, 3000);
+}
+
+function showActiveTimerCount() {
+  chrome.storage.local.get({idCounter: 0, notificationCounter: 0}, function(object) {
+    var numActiveTimers = object.idCounter - object.notificationCounter;
+    chrome.browserAction.setBadgeBackgroundColor({color: '#F00'});
+    chrome.browserAction.setBadgeText({text: numActiveTimers > 0 ? String(numActiveTimers) : ""});
+  });
 }
 
 function History() {
