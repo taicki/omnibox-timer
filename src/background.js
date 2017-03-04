@@ -3,6 +3,10 @@ var audioList = [
   {
     "name": "ring",
     "src": "alarm.wav"
+  },
+  {
+    "name": "mute",
+    "src": "noSound.wav"
   }
 ];
 var audios = {};
@@ -56,6 +60,8 @@ function setupNotification(timer) {
     chrome.storage.local.get({soundType: "tts", soundId: "ring"}, function(object) {
       if (object.soundType == "tts") {
         chrome.tts.speak(timer.desc);
+      } else if (object.soundType == "mute") {
+        audios[1].play();
       } else {
         audios[object.soundId].play();
       }
