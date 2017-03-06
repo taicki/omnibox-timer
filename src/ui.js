@@ -19,12 +19,18 @@ $(function() {
 
     if (object.soundType == "tts") {
       $("input#tts").attr("checked", true);
+    } else if(object.soundType == "mute") {
+      $("input#mute").attr("checked", true);
     } else {
       $("input#bell").attr("checked", true);
     }
 
     $("input#tts").change(function() {
       chrome.storage.local.set({soundType: "tts"});
+      showSaveMessage();
+    });
+    $("input#mute").change(function() {
+      chrome.storage.local.set({soundType: "mute"});
       showSaveMessage();
     });
     $("input#bell").change(function() {

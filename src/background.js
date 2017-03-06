@@ -56,7 +56,7 @@ function setupNotification(timer) {
     chrome.storage.local.get({soundType: "tts", soundId: "ring"}, function(object) {
       if (object.soundType == "tts") {
         chrome.tts.speak(timer.desc);
-      } else {
+      } else if (object.soundType == "bell") {
         audios[object.soundId].play();
       }
     });
