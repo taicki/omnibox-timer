@@ -7,8 +7,8 @@ var audioList = [
 ];
 var audios = {};
 
-// Reset timers when Chrome starts
-resetTimers();
+// Show timer count
+showActiveTimerCount();
 
 // Load all Audios
 loadAudios();
@@ -53,12 +53,14 @@ function setupNotification(timer) {
       }
       console.log(id + ": closed at " + new Date().toString());
     });
-    chrome.storage.local.get({soundType: "tts", soundId: "ring"}, function(object) {
+    chrome.storage.local.get({soundType: "tts", soundId: "ring", notificationCounter: 0}, function(object) {
       if (object.soundType == "tts") {
         chrome.tts.speak(timer.desc);
       } else if (object.soundType == "bell") {
         audios[object.soundId].play();
       }
+      chrome.storage.local.set({notificationCounter: object.notificationCounter+1});
+      showActiveTimerCount();
     });
     console.log(id + ": notified at " + new Date().toString());
   }, ms);
@@ -69,7 +71,11 @@ function tryToSetupTimer(text) {
   var seconds = parseTime(arr.shift());
   if (!seconds) {
     console.log("parse error: " + text);
-    giveFeedback("err");
+    window.alert([
+      'Your input could not be processed as given: "tm ' + text + '".',
+      'Please specify "tm <time>" or "tm <time> <message>".',
+      'For example: "tm 10", "tm 10 Lunch", or "tm 2h Meeting".',
+    ].join("\n\n"));
     return false;
   }
 
@@ -81,6 +87,7 @@ function tryToSetupTimer(text) {
 
   var timer = {
     currentTime: (new Date()).getTime(),
+    text: text,
     desc: desc,
     seconds: seconds
   };
@@ -88,7 +95,7 @@ function tryToSetupTimer(text) {
   setupTimer(timer, function(timer) {
     setupNotification(timer);
     storeTimer(timer);
-    giveFeedback("add")
+    showActiveTimerCount();
   });
 
   return true;
@@ -112,12 +119,6 @@ function storeTimer(timer) {
   });
 }
 
-function resetTimers() {
-  if (chrome && chrome.storage) {
-    chrome.storage.local.set({timers: []});
-  }
-}
-
 function loadAudios() {
   for (var i = 0; i < audioList.length; i++) {
     var item = audioList[i];
@@ -129,11 +130,11 @@ function loadAudios() {
   }
 }
 
-function giveFeedback(message) {
-  chrome.browserAction.setBadgeText({text: message});
-  setTimeout(function() {
-    chrome.browserAction.setBadgeText({text: ""});
-  }, 3000);
+function showActiveTimerCount() {
+  chrome.storage.local.get({idCounter: 0, notificationCounter: 0}, function(object) {
+    var count = object.idCounter - object.notificationCounter;
+    chrome.browserAction.setBadgeText({text: count > 0 ? String(count) : ""});
+  });
 }
 
 function History() {

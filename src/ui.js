@@ -8,14 +8,22 @@ $(function() {
     for (var i = 0; i < object.timers.length; i++) {
       var timer = object.timers[i];
       notificationTime = timer.currentTime + timer.seconds * 1000;
-      $("#timers > tbody:last").append(
-        "<tr><td>" + timer.desc + "</td>"
-        + "<td>" + moment(timer.currentTime).calendar() + "</td>"
-        + "<td>" + moment(notificationTime).calendar() + " (" + moment(notificationTime).fromNow() + ")</td>"
-        + "</tr>");
+      $("#timers > tbody").append(
+        $("<tr>").append(
+          $("<td>").html(timer.text),
+          $("<td>").html(moment(timer.currentTime).calendar()),
+          $("<td>").html(moment(notificationTime).calendar() + " (" + moment(notificationTime).fromNow() + ")")
+        )
+      );
     }
 
-    $("#stats").append("<li># of timers you created: " + object.idCounter + "</li>");
+    $("#clear").click(function() {
+      chrome.storage.local.set({timers: [], idCounter: 0, notificationCounter: 0});
+      chrome.extension.getBackgroundPage().window.location.reload();
+      window.location.reload();
+    });
+
+    $("#stats").text(object.idCounter);
 
     if (object.soundType == "tts") {
       $("input#tts").attr("checked", true);
@@ -57,9 +65,5 @@ $(function() {
 });
 
 function showSaveMessage() {
-  $("#flash").show();
-  $("#flash").html("Saved");
-  setTimeout(function() {
-    $("#flash").fadeOut("slow");
-  }, 1000);
+  $("#flash").stop(true, true).html("saved!").show().fadeOut(2000);
 }

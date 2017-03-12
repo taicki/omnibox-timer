@@ -10,25 +10,11 @@
 
 <body>
 <h1><img src="48.png"/> Omnibox Timer</h1>
-<h2>Current timers</h2>
-<p>Sorted by creation time. Please refresh this page if you created more timers.</p>
-<table id="timers">
-<tbody>
-<tr>
-  <th>Description</th>
-  <th>Creation time</th>
-  <th>Notification time</th>
-</tr>
-</tbody>
-</table>
 
-<h2>Statistics</h2>
-<ul id="stats"></ul>
-
-<h2>Options</h2>
+<h2>Options <em id="flash"></em></h2>
 
 <div>
-<p>Sound:
+<p>Sound for timer notifications:
 <input type="radio" name="soundType" value="tts" id="tts">
 <label for="tts">TTS (Text To Speech)</label>
 <input type="radio" name="soundType" value="bell" id="bell">
@@ -47,7 +33,20 @@
 </p>
 </div>
 
-<div id="flash"></div>
+<h2>History <input type="button" id="clear" value="Clear"/></h2>
+<p>You have created <span id="stats"></span> timers (listed below, sorted by creation time) so far.
+<br>Please refresh this page to see timers you created after opening this page.</p>
+<table id="timers">
+<thead>
+<tr>
+  <th>Timer description</th>
+  <th>Creation time</th>
+  <th>Notification time</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
 
 </body>
 
