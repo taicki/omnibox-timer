@@ -24,6 +24,7 @@ Please send me feedbacks! If you find any bugs or have new feature requests, ple
   * You can select how to suggest timer texts: 'Most recently used timer first' or 'Most frequently used timer first'.
 
 # Releases
+* 0.5.0: Add an option for `no sound`. (Thanks @nocaoper https://github.com/nocaoper)
 * 0.4.2: Patches to use new window.Notification API. (Thanks @sunaku https://github.com/sunaku)
 * 0.4.1: Patches to use new chrome.notifications API. (Thanks @sunaku https://github.com/sunaku)
 * 0.4.0
