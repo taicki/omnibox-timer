@@ -41,7 +41,7 @@ function setupNotification(timer) {
   console.log(id + ": setup " + timer.seconds + " seconds from "
               + timer.currentTime);
 
-  setTimeout(function() {
+  timer.popup = setTimeout(function() {
     var notification = new window.Notification(title, {
       tag: id,
       icon: "48.png",
@@ -64,6 +64,15 @@ function setupNotification(timer) {
   }, ms);
 }
 
+function clearAllNotifications() {
+  chrome.storage.local.get('timers', function(object) {
+    var timers = object.timers;
+    for (var anTimer of timers) {
+      clearTimeout(anTimer.popup);
+    }
+  });
+}
+
 function tryToSetupTimer(text) {
   var arr = text.split(/\s+/);
   var seconds = parseTime(arr.shift());
@@ -82,7 +91,8 @@ function tryToSetupTimer(text) {
   var timer = {
     currentTime: (new Date()).getTime(),
     desc: desc,
-    seconds: seconds
+    seconds: seconds,
+    popup: 0
   };
 
   setupTimer(timer, function(timer) {
