@@ -1,5 +1,3 @@
-// Store history
-var history = History()
 resetDefaultSuggestion();
 
 chrome.omnibox.onInputEntered.addListener(function(text){
@@ -10,7 +8,7 @@ chrome.omnibox.onInputEntered.addListener(function(text){
 
     // Store history when a timer is set
     if (result) {
-      history.add(text);
+      History().add(text);
     }
   }
 });
@@ -40,9 +38,9 @@ chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
   chrome.storage.local.get({historySuggestionType: "time"}, function(object) {
     var suggestions = [];
     if (object.historySuggestionType === "time") {
-      var founds = history.findByTime(text);
+      var founds = History().findByTime(text);
     } else {
-      var founds = history.findByCount(text);
+      var founds = History().findByCount(text);
     }
     for (var i = 0; i < founds.length; i++) {
       var found = founds[i];
