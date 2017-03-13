@@ -1,9 +1,3 @@
-//from http://stackoverflow.com/questions/315078/how-do-you-handle-multiple-instances-of-settimeout
-//Store alerts into a table so that I am able to get a link to cancel
-// them
-var timeOutsTab = new Array();
-var timeOutIncr = 0;
-
 // configurations
 var audioList = [
   {
@@ -47,7 +41,7 @@ function setupNotification(timer) {
   console.log(id + ": setup " + timer.seconds + " seconds from "
               + timer.currentTime);
 
-  timeOutsTab[timeOutIncr++] = setTimeout(function() {
+  timer.popup = setTimeout(function() {
     var notification = new window.Notification(title, {
       tag: id,
       icon: "48.png",
@@ -71,9 +65,12 @@ function setupNotification(timer) {
 }
 
 function clearAllNotifications() {
-   for (key in timeOutsTab) {  
-      clearTimeout(timeOutsTab[key]);  
-   }  
+  chrome.storage.local.get('timers', function(object) {
+    var timers = object.timers;
+    for (var anTimer of timers) {
+      clearTimeout(anTimer.popup);
+    }
+  });
 }
 
 function tryToSetupTimer(text) {
@@ -94,7 +91,8 @@ function tryToSetupTimer(text) {
   var timer = {
     currentTime: (new Date()).getTime(),
     desc: desc,
-    seconds: seconds
+    seconds: seconds,
+    popup: 0
   };
 
   setupTimer(timer, function(timer) {
